@@ -10,7 +10,7 @@ const todoSchema = new Schema({
       _id: { type: Schema.Types.ObjectId, required: true },
     },
   ],
-  owner: { type: String, required: true },
+  owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 module.exports = mongoose.model("Todo", todoSchema);

@@ -4,14 +4,16 @@ const router = express.Router();
 
 const todoControllers = require("../controllers/todo");
 
-router.get("/", todoControllers.getTodo);
+const isAuth = require("../middleware/is-auth");
 
-router.post("/add-task", todoControllers.addTask);
+router.get("/", isAuth, todoControllers.getTodo);
 
-router.delete("/remove-task/:taskId", todoControllers.removeTask);
+router.post("/add-task", isAuth, todoControllers.addTask);
 
-router.put("/update-task/:taskId", todoControllers.updateTask);
+router.delete("/remove-task/:taskId", isAuth, todoControllers.removeTask);
 
-router.put("/overwrite-items", todoControllers.overwriteItems); // endpoint for reordering items / clear complete
+router.put("/update-task/:taskId", isAuth, todoControllers.updateTask);
+
+router.put("/overwrite-items", isAuth, todoControllers.overwriteItems); // endpoint for reordering items / clear complete
 
 module.exports = router;

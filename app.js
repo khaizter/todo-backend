@@ -4,7 +4,9 @@ const MONGODB_URI =
   "mongodb+srv://khaizter:garena123@cluster0.5ojbmh3.mongodb.net/todo?retryWrites=true&w=majority";
 
 const bodyParser = require("body-parser");
+
 const todoRoutes = require("./routes/todo");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -21,6 +23,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/todo", todoRoutes);
+app.use("/auth", authRoutes);
 
 app.use((error, req, res, next) => {
   let { statusCode, message, data } = error;

@@ -1,23 +1,18 @@
 const mongoose = require("mongoose");
 const Todo = require("../models/todo");
+const { throwError } = require("../utils/error");
 
 exports.getTodo = async (req, res, next) => {
-  // return Todo by given user/owner id and name
   try {
     const todo = await Todo.findOne({
       name: "Monday Things",
-      owner: "201910381",
+      owner: req.user._id,
     });
     if (!todo) {
-      const error = new Error("no todo found!");
-      error.statusCode = 404;
-      throw error;
+      throwError("no todo found!", 404);
     }
     res.status(200).json(todo);
   } catch (err) {
-    if (!err.statusCode) {
-      err = 500;
-    }
     next(err);
   }
 };
@@ -29,7 +24,7 @@ exports.addTask = async (req, res, next) => {
   try {
     const todo = await Todo.findOne({
       name: "Monday Things",
-      owner: "201910381",
+      owner: req.user._id,
     });
     if (!todo) {
       const error = new Error("no todo found!");
@@ -53,7 +48,7 @@ exports.removeTask = async (req, res, next) => {
   try {
     const todo = await Todo.findOne({
       name: "Monday Things",
-      owner: "201910381",
+      owner: req.user._id,
     });
     if (!todo) {
       const error = new Error("no todo found!");
@@ -79,7 +74,7 @@ exports.updateTask = async (req, res, next) => {
   try {
     const todo = await Todo.findOne({
       name: "Monday Things",
-      owner: "201910381",
+      owner: req.user._id,
     });
     if (!todo) {
       const error = new Error("no todo found!");
@@ -112,7 +107,7 @@ exports.overwriteItems = async (req, res, next) => {
   try {
     const todo = await Todo.findOne({
       name: "Monday Things",
-      owner: "201910381",
+      owner: req.user._id,
     });
     if (!todo) {
       const error = new Error("no todo found!");
@@ -122,12 +117,10 @@ exports.overwriteItems = async (req, res, next) => {
     // update logic
     todo.items = updatedItems;
     const todoResult = await todo.save();
-    res
-      .status(202)
-      .json({
-        message: "items updated successfully.",
-        updatedTodo: todoResult,
-      });
+    res.status(202).json({
+      message: "items updated successfully.",
+      updatedTodo: todoResult,
+    });
   } catch (err) {
     next(err);
   }
