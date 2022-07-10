@@ -2,19 +2,26 @@ const User = require("../models/user");
 const Todo = require("../models/todo");
 const { throwError } = require("../utils/error");
 const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 
 exports.signup = async (req, res, next) => {
-  const name = req.body.name;
-  const email = req.body.email;
-  const password = req.body.password;
+  const errors = validationResult(req);
 
   try {
+    if (!errors.isEmpty()) {
+      return throwError("validation Error", 400, errors.array());
+    }
+
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+
     // check for user with same email
     const existingUser = await User.findOne({ email: email });
 
     if (existingUser) {
-      console.log(existingUser);
-      throwError("Email already exist.", 400);
+      const data = { email: "Email already exist." };
+      throwError("Email already exist.", 400, data);
     }
 
     const user = new User({
@@ -48,16 +55,25 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.signin = async (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const errors = validationResult(req);
+
   try {
+    if (!errors.isEmpty()) {
+      return throwError("validation Error", 400, errors.array());
+    }
+
+    const email = req.body.email;
+    const password = req.body.password;
+
     // check if email exist
     const user = await User.findOne({ email: email });
     if (!user) {
-      throwError("User with email doesn't exist.", 404);
+      const data = { email: "User with email doesn't exist." };
+      throwError("User with email doesn't exist.", 404, data);
     }
     if (password !== user.password) {
-      throwError("Invalid password", 404);
+      const data = { password: "Invalid password" };
+      throwError("Invalid password", 404, data);
     }
 
     // generate jwt
@@ -72,7 +88,9 @@ exports.signin = async (req, res, next) => {
       }
     );
 
-    res.status(200).json({ message: "login success.", token: token });
+    res
+      .status(200)
+      .json({ message: "login success.", token: token, userName: user.name });
   } catch (err) {
     next(err);
   }
