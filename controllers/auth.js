@@ -3,6 +3,7 @@ const Todo = require("../models/todo");
 const { throwError } = require("../utils/error");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
 
 exports.signup = async (req, res, next) => {
   const errors = validationResult(req);
@@ -24,10 +25,12 @@ exports.signup = async (req, res, next) => {
       throwError("Email already exist.", 400, data);
     }
 
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     const user = new User({
       name: name,
       email: email,
-      password: password,
+      password: hashedPassword,
     });
 
     const userResult = await user.save();
@@ -71,7 +74,11 @@ exports.signin = async (req, res, next) => {
       const data = { email: "User with email doesn't exist." };
       throwError("User with email doesn't exist.", 404, data);
     }
-    if (password !== user.password) {
+
+    // compare password to hashedpassword
+    const isEqual = await bcrypt.compare(password, user.password);
+
+    if (!isEqual) {
       const data = { password: "Invalid password" };
       throwError("Invalid password", 404, data);
     }
