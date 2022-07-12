@@ -49,9 +49,25 @@ exports.signup = async (req, res, next) => {
 
     const finalUserResult = await userResult.save();
 
+    // generate jwt, after register use this token to login
+    const token = jwt.sign(
+      {
+        name: finalUserResult.name,
+        userId: finalUserResult._id,
+      },
+      "supersecret",
+      {
+        expiresIn: "1h",
+      }
+    );
+
     res
       .status(200)
-      .json({ message: "user created.", finalUserResult: finalUserResult });
+      .json({
+        message: "user created.",
+        token: token,
+        userName: finalUserResult.name,
+      });
   } catch (err) {
     next(err);
   }
