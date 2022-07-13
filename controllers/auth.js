@@ -152,11 +152,13 @@ exports.signin = async (req, res, next) => {
 };
 
 exports.signout = async (req, res, next) => {
-  // remove cookie from client
-  res.setHeader(
-    "Set-Cookie",
-    "jwt=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-  );
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+    maxAge: 1,
+  });
+
   res.status(200).json({
     message: "Logout success.",
   });
