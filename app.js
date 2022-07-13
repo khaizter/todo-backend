@@ -32,6 +32,10 @@ app.use((req, res, next) => {
 
 app.use(cookieParser());
 
+app.use("/", (req, res, next) => {
+  return res.status(200).json({ message: "Hello index" });
+});
+
 app.use("/todo", todoRoutes);
 app.use("/auth", authRoutes);
 
