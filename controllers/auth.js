@@ -155,7 +155,7 @@ exports.signout = async (req, res, next) => {
   // remove cookie from client
   res.setHeader(
     "Set-Cookie",
-    "jwt=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    "jwt=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT"
   );
   res.status(200).json({
     message: "Logout success.",
