@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",
-    "https://todo-khaizter.netlify.app"
+    process.env.CORS_WHITELIST || "http://localhost:3000"
   );
   res.header(
     "Access-Control-Allow-Methods",
