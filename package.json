@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "backend for my todo-app",
   "main": "index.js",
+  "engines": {
+    "node": "16.14.0"
+  },
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,15 +25,5 @@
     "express-validator": "^6.14.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.3"
-  },
-  "nodemonConfig": {
-    "env": {
-      "MONGO_USER": "khaizter",
-      "MONGO_PASSWORD": "garena123",
-      "MONGO_DEFAULT_DATABASE": "todo",
-      "CORS_WHITELIST": [
-        "http://localhost:3000"
-      ]
-    }
   }
 }
