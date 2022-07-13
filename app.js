@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const todoRoutes = require("./routes/todo");
 const authRoutes = require("./routes/auth");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
 
