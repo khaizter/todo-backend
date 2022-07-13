@@ -13,19 +13,19 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.setHeader(
+  res.header(
     "Access-Control-Allow-Origin",
     "https://todo-khaizter.netlify.app"
   );
-  res.setHeader(
+  res.header(
     "Access-Control-Allow-Methods",
     "OPTIONS, GET, POST, PUT, PATCH, DELETE"
   );
-  res.setHeader(
+  res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Credentials", true);
   next();
 });
 
