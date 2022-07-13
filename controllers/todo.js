@@ -9,7 +9,7 @@ exports.getTodo = async (req, res, next) => {
       owner: req.user._id,
     });
     if (!todo) {
-      throwError("no todo found!", 404);
+      throwError("No todo found!", 404);
     }
     res.status(200).json(todo);
   } catch (err) {
@@ -18,8 +18,7 @@ exports.getTodo = async (req, res, next) => {
 };
 
 exports.addTask = async (req, res, next) => {
-  const task = req.body.task;
-  const status = req.body.status;
+  const { task, status } = req.body.task;
   const _id = new mongoose.Types.ObjectId();
   try {
     const todo = await Todo.findOne({
@@ -27,9 +26,7 @@ exports.addTask = async (req, res, next) => {
       owner: req.user._id,
     });
     if (!todo) {
-      const error = new Error("no todo found!");
-      error.statusCode = 404;
-      throw error;
+      throwError("No todo found!", 404);
     }
     todo.items.push({
       task: task,
@@ -44,16 +41,14 @@ exports.addTask = async (req, res, next) => {
 };
 
 exports.removeTask = async (req, res, next) => {
-  const taskId = req.params.taskId;
+  const { taskId } = req.params;
   try {
     const todo = await Todo.findOne({
       name: "Monday Things",
       owner: req.user._id,
     });
     if (!todo) {
-      const error = new Error("no todo found!");
-      error.statusCode = 404;
-      throw error;
+      throwError("No todo found!", 404);
     }
     todo.items = todo.items.filter(
       (item) => item._id.toString() !== taskId.toString()
@@ -61,14 +56,14 @@ exports.removeTask = async (req, res, next) => {
     const todoResult = await todo.save();
     res
       .status(202)
-      .json({ message: "task removed successfully.", updatedTodo: todoResult });
+      .json({ message: "Task removed successfully.", updatedTodo: todoResult });
   } catch (err) {
     next(err);
   }
 };
 
 exports.updateTask = async (req, res, next) => {
-  const taskId = req.params.taskId;
+  const { taskId } = req.params;
   const updatedTask = req.body.task;
   const updatedStatus = req.body.status;
   try {
@@ -77,18 +72,14 @@ exports.updateTask = async (req, res, next) => {
       owner: req.user._id,
     });
     if (!todo) {
-      const error = new Error("no todo found!");
-      error.statusCode = 404;
-      throw error;
+      throwError("No todo found!", 404);
     }
     // update logic
     const itemIndex = todo.items.findIndex(
       (item) => item._id.toString() === taskId.toString()
     );
     if (itemIndex < 0) {
-      const error = new Error("no item found!");
-      error.statusCode = 404;
-      throw error;
+      throwError("No item found!", 404);
     }
     const item = todo.items[itemIndex];
     item.task = updatedTask || item.task;
@@ -96,7 +87,7 @@ exports.updateTask = async (req, res, next) => {
     const todoResult = await todo.save();
     res
       .status(202)
-      .json({ message: "task updated successfully.", updatedTodo: todoResult });
+      .json({ message: "Task updated successfully.", updatedTodo: todoResult });
   } catch (err) {
     next(err);
   }
@@ -110,15 +101,13 @@ exports.overwriteItems = async (req, res, next) => {
       owner: req.user._id,
     });
     if (!todo) {
-      const error = new Error("no todo found!");
-      error.statusCode = 404;
-      throw error;
+      throwError("No todo found!", 404);
     }
     // update logic
     todo.items = updatedItems;
     const todoResult = await todo.save();
     res.status(202).json({
-      message: "items updated successfully.",
+      message: "Items updated successfully.",
       updatedTodo: todoResult,
     });
   } catch (err) {

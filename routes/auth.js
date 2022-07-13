@@ -39,4 +39,8 @@ router.post("/signup", signupValidation, authController.signup);
 
 router.post("/signin", signinValidation, authController.signin);
 
+router.post("/signout", authController.signout);
+
+router.post("/refresh", authController.refresh);
+
 module.exports = router;
