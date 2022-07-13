@@ -18,7 +18,7 @@ exports.getTodo = async (req, res, next) => {
 };
 
 exports.addTask = async (req, res, next) => {
-  const { task, status } = req.body.task;
+  const { task, status } = req.body;
   const _id = new mongoose.Types.ObjectId();
   try {
     const todo = await Todo.findOne({
