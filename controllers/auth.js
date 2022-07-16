@@ -100,6 +100,8 @@ exports.signin = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
+    console.log(email, password);
+
     // check if email exist
     const user = await User.findOne({ email: email });
     if (!user) {

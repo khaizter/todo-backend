@@ -7,7 +7,7 @@ const todoSchema = new Schema({
     {
       task: { type: String, required: true },
       status: { type: String, default: "in-progress" },
-      _id: { type: Schema.Types.ObjectId, required: true },
+      _id: { type: String, required: true },
     },
   ],
   owner: { type: Schema.Types.ObjectId, ref: "User", required: true },

@@ -114,3 +114,25 @@ exports.overwriteItems = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.saveTodo = async (req, res, next) => {
+  const updatedItems = req.body.items;
+  try {
+    const todo = await Todo.findOne({
+      name: "Monday Things",
+      owner: req.user._id,
+    });
+    if (!todo) {
+      throwError("No todo found!", 404);
+    }
+    // update logic
+    todo.items = updatedItems;
+    const todoResult = await todo.save();
+    res.status(202).json({
+      message: "Items saved successfully.",
+      updatedTodo: todoResult,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
