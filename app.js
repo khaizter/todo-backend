@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.5ojbmh3.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
+const MONGODB_URI = process.env.MONGO_DB_URI;
 
 const bodyParser = require("body-parser");
 
